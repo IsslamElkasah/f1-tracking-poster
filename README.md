@@ -15,7 +15,7 @@ A print-ready F1 Season Tracker Poster coded using HTML, CSS, and JavaScript. De
 
 ## 🛠️ Usage
 
-1. **Download the Repository:** Clone or download the assets to your local machine. Ensure the `fonts/` and `circuits/` directories remain in the same relative path as `f1.html`.
+1. **Download the Repository:** Clone or download the assets to your local machine. Ensure the `fonts/` and `circuits/` directories remain in the same folder as `f1.html`.
 2. **Open the File:** Open `f1.html` in any modern web browser.
 3. **Print to Poster:** 
    * Press `Ctrl + P` (or `Cmd + P` on Mac) to bring up the print dialogue.
