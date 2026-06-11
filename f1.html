@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>F1 2026 Season Tracker</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=Roboto:wght@400;500;700&display=swap');
+
+@font-face {
+    font-family: "Formula1";
+    src: url("fonts/Formula1-Regular.ttf") format("truetype");
+    font-weight: 400;
+}
+
+@font-face {
+    font-family: "Formula1";
+    src: url("fonts/Formula1-Bold.ttf") format("truetype");
+    font-weight: 700;
+}
+
+@font-face {
+    font-family: "Formula1";
+    src: url("fonts/Formula1-Black.ttf") format("truetype");
+    font-weight: 900;
+}
+
+@font-face {
+    font-family: "Formula1";
+    src: url("fonts/Formula1-Italic.ttf") format("truetype");
+    font-style: italic;
+}
+
+@font-face {
+    font-family: "Formula1";
+    src: url("fonts/Formula1-Wide.ttf") format("truetype");
+    font-stretch: expanded;
+}
+
+:root {
+    --f1-red: #e10600;
+    --dark-gray: #15151e;
+    --light-gray: #f5f5f5;
+    --border-color: #d6d6d6;
+    --purple: #9c27b0;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: "Formula1", monospace !important;
+    background: #dcdcdc;
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+}
+
+.poster-container {
+    width: 100%;
+    max-width: 1200px;
+    background: white;
+    padding: 18px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.top-banner {
+    width: 100%;
+    height: auto;
+    max-height: 180px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin-bottom: 16px;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+    gap: 12px;
+    flex-grow: 1;
+}
+
+.race-card {
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 10px;
+    background: linear-gradient(to bottom, #ffffff, #fafafa);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.card-top {
+    display: grid;
+    grid-template-columns: 32px 1fr 1px 1fr;
+    align-items: stretch;
+    min-height: 78px;
+    margin-bottom: 8px;
+}
+
+.card-top-left {
+    grid-column: 1 / 3;
+    padding-right: 10px;
+}
+
+.vertical-divider {
+    width: 0.02rem;
+    background: #000;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+
+.card-top-right {
+    padding-left: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.round-flag-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.round-badge {
+    background: var(--f1-red);
+    color: white;
+    font-family: 'Formula1';
+    font-size: 1.15rem;
+    padding: 1px 6px;
+    border-radius: 4px;
+    line-height: 1.1;
+}
+
+.flag-img {
+    width: 45px;
+    height: auto;
+    border-radius: 2px;
+    border: 1px solid #ddd;
+    object-fit: cover;
+}
+
+.country-name {
+    font-family: 'Formula1';
+    font-weight: 900;
+    line-height: 1.05;
+    margin-top: 4px;
+    color: var(--dark-gray);
+}
+
+.city-name {
+    font-family: 'Formula1';
+
+    font-style: italic;
+    color: #555;
+    margin-top: 1px;
+}
+
+.date-text {
+    margin-top: 2px;
+    font-family: 'Formula1';
+    font-size: 0.8rem;
+    color: var(--f1-red);
+}
+
+.round-text {
+    font-family: 'Formula1';
+    font-size: 0.6rem;
+    color: #666;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.track-map-container {
+    width: 100px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.track-img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.results-grid {
+    display: grid;
+    row-gap: 4px;
+    margin-top: auto;
+}
+
+.results-grid.sprint {
+    grid-template-columns: 32px 1fr 1fr;
+    column-gap: 4px;
+}
+
+.results-grid.normal {
+    grid-template-columns: 64px 1fr;
+    column-gap: 6px;
+}
+
+.results-header {
+    font-size: 0.52rem;
+    font-weight: 700;
+    text-align: center;
+    color: var(--dark-gray);
+    text-transform: uppercase;
+}
+
+.result-line {
+    width: 100%;
+    height: 18px;
+    border-radius: 3px;
+    background: var(--light-gray);
+    border: 1px solid #e0e0e0;
+}
+
+.border-black {
+    border-color: #000;
+}
+
+.border-purple {
+    border-color: var(--purple);
+}
+
+.p-badge {
+    background: var(--f1-red);
+    color: white;
+    font-family: 'Formula1';
+    font-size: 0.72rem;
+    border-radius: 3px;
+    min-width: 24px;
+    text-align: center;
+    padding: 2px 5px;
+}
+
+.round-badge {
+    background: #e10600 !important;
+    color: white !important;
+    font-weight: 700;
+}
+
+.label-cell {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.label-text {
+    font-size: 0.56rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--dark-gray);
+    line-height: 1;
+}
+
+.stat-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--dark-gray);
+    width: 14px;
+    flex-shrink: 0;
+}
+
+.pole-icon {
+    background: var(--dark-gray);
+    color: white;
+    border-radius: 2px;
+    height: 14px;
+}
+
+* {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+
+
+@page {
+    size: auto;
+    margin: 0;
+
+}
+
+@media print {
+    html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        background: white;
+        display: block;
+    }
+
+    .poster-container {
+        width: 100vw;
+        height: 100vh;
+        max-width: none;
+        padding: 18px;
+        box-shadow: none;
+        box-sizing: border-box;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="poster-container">
+
+    <div class="top-banner">
+        <img src="circuits/header_3.png" class="top-banner">
+    </div>
+
+    <div class="grid-container"></div>
+
+</div>
+
+<script>
+
+const races = [
+    { r:'01', c:'AUSTRALIA', fc:'au', loc:'Melbourne', d:'MAR 06–08' },
+    { r:'02', c:'CHINA', fc:'cn', loc:'Shanghai', d:'MAR 13–15' },
+    { r:'03', c:'JAPAN', fc:'jp', loc:'Suzuka', d:'MAR 27–29' },
+    { r:'04', c:'BAHRAIN', fc:'bh', loc:'Bahrain', d:'APR 10–12' },
+    { r:'05', c:'SAUDI ARABIA', fc:'sa', loc:'Jeddah', d:'APR 17–19' },
+    { r:'06', c:'MIAMI', fc:'us', loc:'Miami', d:'MAY 01–03' },
+    { r:'07', c:'CANADA', fc:'ca', loc:'Montreal', d:'MAY 22–24' },
+    { r:'08', c:'MONACO', fc:'mc', loc:'Monte Carlo', d:'JUN 05–07' },
+    { r:'09', c:'SPAIN', fc:'es', loc:'Barcelona-Catalunya', d:'JUN 12–14' },
+    { r:'10', c:'AUSTRIA', fc:'at', loc:'Spielberg', d:'JUN 26–28' },
+    { r:'11', c:'GREAT BRITAIN', fc:'gb', loc:'Silverstone', d:'JUL 03–05' },
+    { r:'12', c:'BELGIUM', fc:'be', loc:'Spa-Francorchamps', d:'JUL 17–19' },
+    { r:'13', c:'HUNGARY', fc:'hu', loc:'Budapest', d:'JUL 24–26' },
+    { r:'14', c:'NETHERLANDS', fc:'nl', loc:'Zandvoort', d:'AUG 21–23' },
+    { r:'15', c:'ITALY', fc:'it', loc:'Monza', d:'SEP 04–06' },
+    { r:'16', c:'SPAIN', fc:'es', loc:'Madrid', d:'SEP 11–13' },
+    { r:'17', c:'AZERBAIJAN', fc:'az', loc:'Baku', d:'SEP 25–27' },
+    { r:'18', c:'SINGAPORE', fc:'sg', loc:'Singapore', d:'OCT 09–11' },
+    { r:'19', c:'UNITED STATES', fc:'us', loc:'Austin', d:'OCT 23–25' },
+    { r:'20', c:'MEXICO', fc:'mx', loc:'Mexico City', d:'OCT 30–NOV 01' },
+    { r:'21', c:'BRAZIL', fc:'br', loc:'São Paulo', d:'NOV 06–08' },
+    { r:'22', c:'LAS VEGAS', fc:'us', loc:'Las Vegas', d:'NOV 19–21' },
+    { r:'23', c:'QATAR', fc:'qa', loc:'Lusail', d:'NOV 27–29' },
+    { r:'24', c:'ABU DHABI', fc:'ae', loc:'Yas Island', d:'DEC 04–06' }
+];
+
+const sprintRounds = ['02', '06', '07', '11', '14', '18'];
+
+const grid = document.querySelector('.grid-container');
+
+races.forEach(race => {
+
+    const isSprint = sprintRounds.includes(race.r);
+
+    const card = document.createElement('div');
+    card.className = 'race-card';
+
+    let html = `
+        <div class="card-top">
+
+            <div class="card-top-left">
+
+                <div class="round-flag-row">
+                    <span class="round-badge">${race.r}</span>
+
+                    <img
+                        src="https://flagcdn.com/w80/${race.fc}.png"
+                        class="flag-img"
+                    >
+                </div>
+
+                <div class="country-name">${race.c}</div>
+                <div class="city-name">${race.loc}</div>
+                <div class="date-text">${race.d}</div>
+
+            </div>
+
+            <div class="vertical-divider"></div>
+
+            <div class="card-top-right">
+
+                <div class="round-text">
+                    ROUND ${parseInt(race.r)}
+                </div>
+
+                <div class="track-map-container">
+                    <img src="circuits/${race.r}_${race.loc}.svg" class="track-img">
+                </div>
+
+            </div>
+
+        </div>
+    `;
+
+    if (isSprint) {
+
+        html += `
+            <div class="results-grid sprint">
+
+                <div></div>
+                <div class="results-header">SPRINT</div>
+                <div class="results-header">RACE</div>
+
+                <div class="p-badge">P1</div>
+                <div class="result-line"></div>
+                <div class="result-line"></div>
+
+                <div class="p-badge">P2</div>
+                <div class="result-line"></div>
+                <div class="result-line"></div>
+
+                <div class="p-badge">P3</div>
+                <div class="result-line"></div>
+                <div class="result-line"></div>
+
+                <div class="stat-icon pole-icon">1</div>
+                <div class="result-line border-black"></div>
+                <div class="result-line border-black"></div>
+
+                <div class="stat-icon">⏱</div>
+                <div class="result-line border-purple"></div>
+                <div class="result-line border-purple"></div>
+
+                <div class="stat-icon">★</div>
+                <div class="result-line border-black"></div>
+                <div class="result-line border-black"></div>
+
+            </div>
+        `;
+
+    } else {
+
+        html += `
+            <div class="results-grid normal">
+
+                <div></div>
+                <div></div>
+
+                <div class="label-cell">
+                    <div class="p-badge">P1</div>
+                </div>
+                <div class="result-line"></div>
+
+                <div class="label-cell">
+                    <div class="p-badge">P2</div>
+                </div>
+                <div class="result-line"></div>
+
+                <div class="label-cell">
+                    <div class="p-badge">P3</div>
+                </div>
+                <div class="result-line"></div>
+
+                <div class="label-cell">
+                    <div class="stat-icon pole-icon">1</div>
+                    <div class="label-text">Pole</div>
+                </div>
+                <div class="result-line border-black"></div>
+
+                <div class="label-cell">
+                    <div class="stat-icon">⏱</div>
+                    <div class="label-text">Fastest</div>
+                </div>
+                <div class="result-line border-purple"></div>
+
+                <div class="label-cell">
+                    <div class="stat-icon">★</div>
+                    <div class="label-text">DOTD</div>
+                </div>
+                <div class="result-line border-black"></div>
+
+            </div>
+        `;
+    }
+
+    card.innerHTML = html;
+    grid.appendChild(card);
+
+});
+
+</script>
+
+</body>
+</html>
